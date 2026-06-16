@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<body style="text-align:center; font-family:Arial;">
+
+<h2>Pokémon Stats</h2>
+
+<input type="text" id="pokemon" placeholder="Enter Pokémon name">
+<button onclick="getPokemon()">Show Pokémon</button>
+
+<div id="result"></div>
+
+<script>
+async function getPokemon() {
+
+    let name = document.getElementById("pokemon").value;
+
+    let response = await fetch(
+        "https://pokeapi.co/api/v2/pokemon/" + name
+    );
+
+    if(response.ok == false) {
+        document.getElementById("result").innerHTML =
+            "<h3>Pokémon not found!</h3>";
+        return;
+    }
+
+    let data = await response.json();
+
+    let stats = "";
+
+    for(let i = 0; i < 5; i++) {
+        stats += data.stats[i].stat.name +
+                 " : " +
+                 data.stats[i].base_stat +
+                 "<br>";
+    }
+
+    document.getElementById("result").innerHTML =
+        `<img src="${data.sprites.front_default}">
+         <h3>${data.name}</h3>
+         <h3>Stats</h3>
+         ${stats}`;
+}
+</script>
+
+</body>
+</html>
